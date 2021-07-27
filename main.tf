@@ -30,8 +30,13 @@ resource "aws_flow_log" "log" {
 }
 
 resource "aws_subnet" "apps_subnet" {
-  vpc_id            = aws_vpc.scdad_vpc.id
-  cidr_block        = "10.8.1.0/24"
+  vpc_id     = aws_vpc.scdad_vpc.id
+  cidr_block = "10.8.1.0/24"
+}
+
+resource "aws_network_acl" "acl_ok" {
+  vpc_id     = aws_vpc.scdad_vpc.id
+  subnet_ids = [aws_subnet.apps_subnet.id]
 }
 
 resource "aws_security_group" "nexus3_sg" {
@@ -64,6 +69,7 @@ resource "aws_instance" "nexus3" {
   ami                    = "ami-029c0fbe456d58bd1"
   instance_type          = "t3a.medium"
   monitoring             = true
+  ebs_optimized          = true
   vpc_security_group_ids = [aws_security_group.nexus3_sg.id]
   subnet_id              = aws_subnet.apps_subnet.id
 
@@ -71,5 +77,14 @@ resource "aws_instance" "nexus3" {
     Terraform = "true"
     Owner     = "gene.gotimer@steampunk.com"
     Name      = "nexus3"
+  }
+
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required"
+  }
+
+  root_block_device {
+    encrypted = true
   }
 }
