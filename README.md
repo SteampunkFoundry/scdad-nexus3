@@ -1,7 +1,36 @@
 # scdad-nexus3
 
-Provisions a server for SCDAD to deploy Nexus 3 onto.
+Provisions a server for SCDAD and deploys Nexus 3 on to it.
 
+Provision the server and VPC using Terraform:
+
+```console
+$ terraform plan
+$ terraform apply
+...
+Outputs:
+
+nexus3_ip = "18.204.176.48"
+```
+
+Copy the `nexus3_ip` value into `hosts`:
+
+```text
+18.204.176.48
+
+[nexus3]
+18.204.176.48
+```
+
+Install Sonatype Nexus 3 using Ansible:
+
+```shell
+$ ansible-galaxy install geerlingguy.java
+$ ansible-galaxy install ansible-thoteam.nexus3-oss
+$ ansible-playbook -i hosts --private-key=~/.ssh/ansible scdad-nexus3.yml
+```
+
+# Terraform docs
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
