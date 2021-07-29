@@ -99,13 +99,8 @@ resource "aws_security_group" "nexus3_sg" {
   }
 }
 
-resource "aws_key_pair" "ansible_key" {
-  key_name   = "ansible_key"
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC9t5POXpGhrn3bpAA2pVITOlJ+kKBV8eq5owNoonPXDu1tMbLNBT6ZoZBwW5G5YY+xQbnnSyKGH3NVUoGai94jukST3l59kkdBP9/HyRm+ig4+IFYO83cNuoRilmKGtopRHoKhPfsPa9rPN9byG9iMUJ7zMOkp5uP6Hvcd49u4sqipOYeHmMg7BNKxNMf5HQ9bm3knc5xMPNmdsK6kVoDMVef0xG6GURlDtvlki9NY43jn5EGeGntngZQIBu+AcbDQJbGizeBCA6ZUkmjtX2zspifwpzscSpxccuIlpwmCHOLT1eAv9aV7bwyK5ijL5PGoI8GF/QcXfEwbAvA3YZsp6kE75evOlXI0y1kM7mJjfR3u69rZEszeoyZNS0fCccNKt/342jyqYrOak/phhy53rRGLriuHEFubGJY1oTAHiSlw+tbSwHbJ8kjf4PEESeMqEnQzqkysyPluaKH/KrfkrStwD2ZDlgdeCkv+AXV5TN9gLEZ4v0MQEU0jqHjwZKE= ansible"
-}
-
 resource "aws_instance" "nexus3" {
-  ami                    = "ami-029c0fbe456d58bd1"
+  ami                    = "ami-00e87074e52e6c9f9"
   instance_type          = "t3a.medium"
   monitoring             = true
   ebs_optimized          = true
