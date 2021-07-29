@@ -1,0 +1,11 @@
+- name: nexus3
+  hosts: nexus3
+  remote_user: centos
+  become: true
+
+  vars:
+    nexus_version: '3.30.0-01'
+
+  roles:
+    - geerlingguy.java
+    - ansible-thoteam.nexus3-oss

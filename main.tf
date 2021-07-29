@@ -15,10 +15,19 @@ provider "aws" {
 }
 
 resource "aws_vpc" "scdad_vpc" {
+  #checkov:skip=CKV2_AWS_1: This is for public access
   cidr_block = "10.8.0.0/16"
+
+  tags = {
+    Name = "scdad"
+  }
 }
 
 resource "aws_default_security_group" "default" {
+  vpc_id = aws_vpc.scdad_vpc.id
+}
+
+resource "aws_internet_gateway" "scdad_gateway" {
   vpc_id = aws_vpc.scdad_vpc.id
 }
 
@@ -29,14 +38,27 @@ resource "aws_flow_log" "log" {
   vpc_id          = aws_vpc.scdad_vpc.id
 }
 
-resource "aws_subnet" "apps_subnet" {
+resource "aws_subnet" "public_subnet" {
   vpc_id     = aws_vpc.scdad_vpc.id
-  cidr_block = "10.8.1.0/24"
+  cidr_block = "10.8.0.0/24"
+
+  tags = {
+    Name = "public"
+  }
 }
 
-resource "aws_network_acl" "acl_ok" {
-  vpc_id     = aws_vpc.scdad_vpc.id
-  subnet_ids = [aws_subnet.apps_subnet.id]
+resource "aws_route_table" "rtb_public" {
+  vpc_id = aws_vpc.scdad_vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.scdad_gateway.id
+  }
+}
+
+resource "aws_route_table_association" "rta_subnet_public" {
+  subnet_id      = aws_subnet.public_subnet.id
+  route_table_id = aws_route_table.rtb_public.id
 }
 
 resource "aws_security_group" "nexus3_sg" {
@@ -44,11 +66,23 @@ resource "aws_security_group" "nexus3_sg" {
   description = "Nexus 3 traffic"
   vpc_id      = aws_vpc.scdad_vpc.id
 
+  #checkov:skip=CKV_AWS_24: This is for public access
   ingress {
-    description = "HTTP"
-    from_port   = 8081
-    to_port     = 8081
-    protocol    = "tcp"
+    description      = "SSH"
+    from_port        = 22
+    to_port          = 22
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  ingress {
+    description      = "HTTP"
+    from_port        = 8081
+    to_port          = 8081
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
   }
 
   egress {
@@ -66,12 +100,13 @@ resource "aws_security_group" "nexus3_sg" {
 }
 
 resource "aws_instance" "nexus3" {
-  ami                    = "ami-029c0fbe456d58bd1"
+  ami                    = "ami-00e87074e52e6c9f9"
   instance_type          = "t3a.medium"
   monitoring             = true
   ebs_optimized          = true
   vpc_security_group_ids = [aws_security_group.nexus3_sg.id]
-  subnet_id              = aws_subnet.apps_subnet.id
+  subnet_id              = aws_subnet.public_subnet.id
+  key_name               = "ansible_key"
 
   tags = {
     Terraform = "true"
@@ -87,4 +122,9 @@ resource "aws_instance" "nexus3" {
   root_block_device {
     encrypted = true
   }
+}
+
+resource "aws_eip" "nexus3_eip" {
+  instance = aws_instance.nexus3.id
+  vpc      = true
 }
