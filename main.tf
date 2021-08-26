@@ -61,8 +61,8 @@ resource "aws_route_table_association" "rta_subnet_public" {
   route_table_id = aws_route_table.rtb_public.id
 }
 
-resource "aws_security_group" "nexus3_sg" {
-  name        = "nexus3_sg"
+resource "aws_security_group" "gitlab_sg" {
+  name        = "gitlab_sg"
   description = "Nexus 3 traffic"
   vpc_id      = aws_vpc.scdad_vpc.id
 
@@ -78,8 +78,26 @@ resource "aws_security_group" "nexus3_sg" {
 
   ingress {
     description      = "HTTP"
-    from_port        = 8081
-    to_port          = 8081
+    from_port        = 80
+    to_port          = 80
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  ingress {
+    description      = "HTTPS"
+    from_port        = 443
+    to_port          = 443
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  ingress {
+    description      = "PostgreSQL"
+    from_port        = 5432
+    to_port          = 5432
     protocol         = "tcp"
     cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
@@ -94,24 +112,25 @@ resource "aws_security_group" "nexus3_sg" {
   }
 
   tags = {
-    Name  = "nexus3_sg"
+    Name  = "gitlab_sg"
     Owner = "gene.gotimer@steampunk.com"
   }
 }
 
-resource "aws_instance" "nexus3" {
+resource "aws_instance" "gitlab" {
+  count                  = 2
   ami                    = "ami-00e87074e52e6c9f9"
-  instance_type          = "t3a.medium"
+  instance_type          = "m5a.large"
   monitoring             = true
   ebs_optimized          = true
-  vpc_security_group_ids = [aws_security_group.nexus3_sg.id]
+  vpc_security_group_ids = [aws_security_group.gitlab_sg.id]
   subnet_id              = aws_subnet.public_subnet.id
   key_name               = "ansible_key"
 
   tags = {
     Terraform = "true"
     Owner     = "gene.gotimer@steampunk.com"
-    Name      = "nexus3"
+    Name      = "gitlab${count.index}"
   }
 
   metadata_options {
@@ -124,7 +143,12 @@ resource "aws_instance" "nexus3" {
   }
 }
 
-resource "aws_eip" "nexus3_eip" {
-  instance = aws_instance.nexus3.id
+resource "aws_eip" "gitlab_eip0" {
+  instance = aws_instance.gitlab[0].id
+  vpc      = true
+}
+
+resource "aws_eip" "gitlab_eip1" {
+  instance = aws_instance.gitlab[1].id
   vpc      = true
 }

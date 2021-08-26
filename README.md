@@ -54,13 +54,14 @@ No modules.
 | Name | Type |
 |------|------|
 | [aws_default_security_group.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/default_security_group) | resource |
-| [aws_eip.nexus3_eip](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eip) | resource |
+| [aws_eip.gitlab_eip0](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eip) | resource |
+| [aws_eip.gitlab_eip1](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eip) | resource |
 | [aws_flow_log.log](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/flow_log) | resource |
-| [aws_instance.nexus3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance) | resource |
+| [aws_instance.gitlab](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance) | resource |
 | [aws_internet_gateway.scdad_gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway) | resource |
 | [aws_route_table.rtb_public](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table) | resource |
 | [aws_route_table_association.rta_subnet_public](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association) | resource |
-| [aws_security_group.nexus3_sg](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
+| [aws_security_group.gitlab_sg](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
 | [aws_subnet.public_subnet](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet) | resource |
 | [aws_vpc.scdad_vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc) | resource |
 
@@ -77,5 +78,6 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_nexus3_ip"></a> [nexus3\_ip](#output\_nexus3\_ip) | The elastic IP address of the nexus3 instance. |
+| <a name="output_gitlab_ip0"></a> [gitlab\_ip0](#output\_gitlab\_ip0) | The elastic IP address of the first gitlab instance. |
+| <a name="output_gitlab_ip1"></a> [gitlab\_ip1](#output\_gitlab\_ip1) | The elastic IP address of the second gitlab instance. |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
