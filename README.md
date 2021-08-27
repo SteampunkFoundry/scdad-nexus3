@@ -1,5 +1,7 @@
 # scdad-gitlab
 
+Testing old secondary-new primary.
+
 Provisions an environment for SCDAD so that 2 GitLab servers can be installed to it.
 
 Provision the servers and VPC using Terraform:
