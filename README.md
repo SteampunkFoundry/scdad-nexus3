@@ -41,8 +41,7 @@ No modules.
 | Name | Type |
 |------|------|
 | [aws_default_security_group.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/default_security_group) | resource |
-| [aws_eip.gitlab_eip0](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eip) | resource |
-| [aws_eip.gitlab_eip1](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eip) | resource |
+| [aws_eip.gitlab_eip](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eip) | resource |
 | [aws_flow_log.log](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/flow_log) | resource |
 | [aws_instance.gitlab](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance) | resource |
 | [aws_internet_gateway.scdad_gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway) | resource |
@@ -65,6 +64,6 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_gitlab_ip0"></a> [gitlab\_ip0](#output\_gitlab\_ip0) | The elastic IP address of the first gitlab instance. |
-| <a name="output_gitlab_ip1"></a> [gitlab\_ip1](#output\_gitlab\_ip1) | The elastic IP address of the second gitlab instance. |
+| <a name="output_gitlab_ips"></a> [gitlab\_ips](#output\_gitlab\_ips) | The elastic IP addresses of the gitlab instances. |
+| <a name="output_gitlab_private_ips"></a> [gitlab\_private\_ips](#output\_gitlab\_private\_ips) | The private IP addresses of the gitlab instances. |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

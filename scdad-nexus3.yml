@@ -4,9 +4,9 @@
   become: true
 
   vars:
-    nexus_version: '3.30.0-01'
-    # nexus_version: '3.32.0-03'
-    # nexus_upgrade: true
+    # nexus_version: '3.30.0-01'
+    nexus_version: '3.32.0-03'
+    nexus_upgrade: true
 
   roles:
     - geerlingguy.java

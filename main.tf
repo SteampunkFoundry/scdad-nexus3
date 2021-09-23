@@ -128,9 +128,10 @@ resource "aws_instance" "gitlab" {
   key_name               = "ansible_key"
 
   tags = {
-    Terraform = "true"
-    Owner     = "gene.gotimer@steampunk.com"
-    Name      = "gitlab${count.index}"
+    Terraform         = "true"
+    Owner             = "gene.gotimer@steampunk.com"
+    Name              = "gitlab${count.index}"
+    CustodianOffHours = "off=(M-F,19)"
   }
 
   metadata_options {
@@ -143,12 +144,8 @@ resource "aws_instance" "gitlab" {
   }
 }
 
-resource "aws_eip" "gitlab_eip0" {
-  instance = aws_instance.gitlab[0].id
-  vpc      = true
-}
-
-resource "aws_eip" "gitlab_eip1" {
-  instance = aws_instance.gitlab[1].id
+resource "aws_eip" "gitlab_eip" {
+  count    = length(aws_instance.gitlab)
+  instance = element(aws_instance.gitlab[*].id, count.index)
   vpc      = true
 }

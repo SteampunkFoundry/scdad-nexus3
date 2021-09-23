@@ -1,9 +1,8 @@
-output "gitlab_ip0" {
-  value       = aws_eip.gitlab_eip0.public_ip
-  description = "The elastic IP address of the first gitlab instance."
+output "gitlab_ips" {
+  value       = aws_eip.gitlab_eip[*].public_ip
+  description = "The elastic IP addresses of the gitlab instances."
 }
-
-output "gitlab_ip1" {
-  value       = aws_eip.gitlab_eip1.public_ip
-  description = "The elastic IP address of the second gitlab instance."
+output "gitlab_private_ips" {
+  value       = aws_eip.gitlab_eip[*].private_ip
+  description = "The private IP addresses of the gitlab instances."
 }
